@@ -1,6 +1,6 @@
 esphome:
   name: poollights
-  
+
 esp8266:
   board: esp01_1m
 
@@ -19,7 +19,7 @@ api:
 
 ota:
   - platform: esphome
-    
+
 binary_sensor:
   - platform: gpio
     pin:
@@ -30,14 +30,21 @@ binary_sensor:
     on_press:
       - light.toggle: pool_lightz
 
+external_components:
+  - source: 
+      type: git
+      url: https://github.com/marvinrobot78/pool_lights.git
+      ref: main
+    components: pool_lights
+
 light:
   - platform: pool_lights
     id: pool_lightz
     name: "Pool Lights"
-            
+
 sensor:
   - platform: wifi_signal
     name: "WiFi Signal"
     update_interval: 60s
-    
+
 captive_portal:
