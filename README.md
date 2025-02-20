@@ -1,2 +1,2 @@
 # pool_lights
-A custome ESPHome component for pool lights
+A custom ESPHome component for pool lights.
