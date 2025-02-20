@@ -1,0 +1,43 @@
+esphome:
+  name: poollights
+  
+esp8266:
+  board: esp01_1m
+
+wifi:
+  networks:
+  - ssid: !secret wifi_ssid
+    password: !secret wifi_password
+
+  ap:
+    ssid: "Pool lights Fallback Hotspot"
+    password: "Dkx9aUWZHY19"
+
+logger:
+
+api:
+
+ota:
+  - platform: esphome
+    
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO14
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Power Button"
+    on_press:
+      - light.toggle: pool_lightz
+
+light:
+  - platform: pool_lights
+    id: pool_lightz
+    name: "Pool Lights"
+            
+sensor:
+  - platform: wifi_signal
+    name: "WiFi Signal"
+    update_interval: 60s
+    
+captive_portal:
