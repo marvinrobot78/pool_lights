@@ -41,6 +41,7 @@ light:
   - platform: pool_lights
     id: pool_lightz
     name: "Pool Lights"
+    default_transition_length: 0s
 
 sensor:
   - platform: wifi_signal
