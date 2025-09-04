@@ -11,8 +11,7 @@ class PoolLights : public light::LightOutput {
 
  public:
   void setup() {
-    pinMode(4, OUTPUT);
-    pinMode(12, OUTPUT);
+    pinMode(26, OUTPUT);
     //delay(5000);
   }
  
@@ -26,12 +25,6 @@ class PoolLights : public light::LightOutput {
     brightness = new_state->current_values.get_brightness();
     on_off_state = new_state->current_values.get_state();
     colour = get_colour_from_rgb(new_state);
-    
-    if (this->on_off_state == 0.0) {
-      digitalWrite(4, LOW);
-    } else {
-      digitalWrite(4, HIGH);
-    }
   }
 
   void write_state(esphome::light::LightState *new_state) override {
@@ -84,12 +77,10 @@ class PoolLights : public light::LightOutput {
     }
     
     if (this->on_off_state == 0.0 && new_on_off_state > 0) {
-      digitalWrite(4, LOW);
       delay(1000);
-      digitalWrite(12, HIGH);
+      digitalWrite(26, HIGH);
     } else if (this->on_off_state > 0 && new_on_off_state == 0.0) {
-      digitalWrite(4, HIGH);
-      digitalWrite(12, LOW);
+      digitalWrite(26, LOW);
       delay(2000);
     }
     
@@ -133,9 +124,9 @@ class PoolLights : public light::LightOutput {
   }
   
   void control_by_time(long time) {
-    digitalWrite(12, LOW);
+    digitalWrite(26, LOW);
     delay(time);
-    digitalWrite(12, HIGH);
+    digitalWrite(26, HIGH);
     delay(1500);
   }
 };
