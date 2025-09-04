@@ -1,20 +1,26 @@
 #include "esphome.h"
+#include "esphome/core/component.h"
 #include "esphome/components/light/light_output.h"
 
 namespace esphome {
   namespace pool_lights {
 
-    class PoolLights : public light::LightOutput {
+    class PoolLights : public light::LightOutput, public Component {
      protected:
       float brightness, on_off_state;
       int colour;
+      GPIOPin *pin_;
 
      public:
-      void setup() {
-        pinMode(26, OUTPUT);
+      void setup() override {
         //delay(5000);
       }
-     
+
+      void set_output_pin(GPIOPin *pin) {
+        this->pin_ = pin;
+        this->pin_->setup();
+      }
+
       esphome::light::LightTraits get_traits() override {
         auto traits = esphome::light::LightTraits();
         traits.set_supported_color_modes({esphome::light::ColorMode::RGB, esphome::light::ColorMode::BRIGHTNESS});
@@ -30,7 +36,7 @@ namespace esphome {
       void write_state(esphome::light::LightState *new_state) override {
         float new_brightness = new_state->current_values.get_brightness();
         float new_on_off_state = new_state->current_values.get_state();
-        int new_colour = get_colour_from_rgb(new_state);  
+        int new_colour = get_colour_from_rgb(new_state);
         
         if (this->brightness != new_brightness) {
           if (this->brightness >= 0.67 && new_brightness < 0.67 && new_brightness > 0.33) {
@@ -78,12 +84,12 @@ namespace esphome {
         
         if (this->on_off_state == 0.0 && new_on_off_state > 0) {
           delay(1000);
-          digitalWrite(26, HIGH);
+          this->pin_->digital_write(true);
         } else if (this->on_off_state > 0 && new_on_off_state == 0.0) {
-          digitalWrite(26, LOW);
+          this->pin_->digital_write(false);
           delay(2000);
         }
-        
+
         this->brightness = new_brightness;
         this->on_off_state = new_on_off_state;
         this->colour = new_colour;
@@ -124,9 +130,9 @@ namespace esphome {
       }
       
       void control_by_time(long time) {
-        digitalWrite(26, LOW);
+        this->pin_->digital_write(false);
         delay(time);
-        digitalWrite(26, HIGH);
+        this->pin_->digital_write(true);
         delay(1500);
       }
     };
