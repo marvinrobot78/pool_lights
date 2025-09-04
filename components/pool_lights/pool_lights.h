@@ -19,6 +19,7 @@ namespace esphome {
       void set_output_pin(GPIOPin *pin) {
         this->pin_ = pin;
         this->pin_->setup();
+        this->pin_->digital_write(false);
       }
 
       esphome::light::LightTraits get_traits() override {
