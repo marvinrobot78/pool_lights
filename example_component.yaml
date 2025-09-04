@@ -33,6 +33,7 @@ external_components:
       type: git
       url: https://github.com/marvinrobot78/pool_lights.git
       ref: main
+    refresh: 0s
     components: pool_lights
 
 light:
